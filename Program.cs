@@ -15,9 +15,26 @@ app.MapGet("/dbconnection", async ([FromServices] TasksContext dbContext) =>
     return Results.Ok("Base de datos en memoria: " + dbContext.Database.IsInMemory());
 });
 
+//app.MapGet("/api/tasks", async ([FromServices] TasksContext dbContext) =>
+//{
+//    return Results.Ok(dbContext.Tasks.Include(c => c.Category).Where(t => t.PriorityTask == Priority.Low));
+//});
+
 app.MapGet("/api/tasks", async ([FromServices] TasksContext dbContext) =>
 {
-    return Results.Ok(dbContext.Tasks.Include(c => c.Category).Where(t => t.PriorityTask == Priority.Low));
+    return Results.Ok(dbContext.Tasks.Include(c => c.Category));
+});
+
+app.MapPost("/api/tasks", async ([FromServices] TasksContext dbContext, [FromBody] projectef.Models.Task task) =>
+{
+    task.TaskId = Guid.NewGuid();
+    task.DateCreated = DateTime.Now;
+    Console.WriteLine(task);
+    await dbContext.Tasks.AddAsync(task);
+    //await dbContext.AddAsync(task);
+
+    await dbContext.SaveChangesAsync();
+    return Results.Ok();
 });
 
 app.Run();
