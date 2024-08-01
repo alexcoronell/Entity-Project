@@ -17,7 +17,7 @@ namespace projectef.Models
         public string Description { get; set; }
         public Priority PriorityTask { get; set; }
         public DateTime DateCreated { get; set; }
-        public virtual required Category Category { get; set; }
+        public virtual Category Category { get; set; }
 
         //[NotMapped]
         public string Resume {  get; set; }
